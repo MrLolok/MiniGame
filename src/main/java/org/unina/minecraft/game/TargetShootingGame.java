@@ -1,7 +1,11 @@
 package org.unina.minecraft.game;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -21,9 +25,8 @@ public class TargetShootingGame implements ITargetShootingGame {
             return false;
         if (players.size() >= MAX_PLAYERS)
             return false;
-        if (started) {
-            //...
-        }
+        if (started)
+            equip(player);
         players.put(player.getUniqueId(), 0);
         return true;
     }
@@ -37,6 +40,11 @@ public class TargetShootingGame implements ITargetShootingGame {
     public void start() {
         if (started)
             throw new IllegalStateException("Game already started.");
+        for (UUID uuid : players.keySet()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null)
+                equip(player);
+        }
         started = true;
     }
 
@@ -46,5 +54,10 @@ public class TargetShootingGame implements ITargetShootingGame {
         if (target != null)
             target.remove();
         players.clear();
+    }
+
+    private void equip(Player player) {
+        player.getInventory().addItem(BOW.clone(), new ItemStack(Material.ARROW));
+        player.sendTitle("§b§lATTACCA LO ZOMBIE", "Ti è stato equipaggiato un arco, spara!", 20, 60, 20);
     }
 }
