@@ -19,7 +19,7 @@ import java.util.List;
 public class TargetShootingService implements ITargetShootingService {
     private final JavaPlugin plugin;
     private final List<ITargetShootingGame> games = new LinkedList<>();
-    private Listener playerConnectionListener, inventoryClickListener, targetShootingListener, fireballExplosionListener, entityDamageListener;
+    private final Listener playerConnectionListener, inventoryClickListener, targetShootingListener, fireballExplosionListener, entityDamageListener;
 
     public TargetShootingService(JavaPlugin plugin) {
         this.plugin = plugin;
