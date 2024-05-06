@@ -7,6 +7,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.unina.minecraft.game.ITargetShootingGame;
 import org.unina.minecraft.game.ITargetShootingService;
 

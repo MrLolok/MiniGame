@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.unina.minecraft.items.ItemBuilder;
 
@@ -15,7 +16,7 @@ import java.util.Map;
 public interface ITargetShootingGame {
     World DEFAULT_WORLD = Bukkit.getServer().getWorlds().get(0);
     int MAX_PLAYERS = 4;
-    ItemStack BOW = new ItemBuilder().setMaterial(Material.BOW).setName("§3Arco").setEnchantments(Map.of(Enchantment.ARROW_INFINITE, 1)).build();
+    ItemStack BOW = new ItemBuilder().setMaterial(Material.BOW).setName("§3Arco").setUnbreakable(true).setItemFlags(ItemFlag.HIDE_UNBREAKABLE).setEnchantments(Enchantment.ARROW_INFINITE).build();
 
     int getPlayersCount();
 

@@ -114,7 +114,6 @@ public class TargetShootingGame implements ITargetShootingGame {
     private void setTargetDetails() {
         if (!(target instanceof LivingEntity entity)) return;
         entity.setAI(false);
-        entity.setInvulnerable(true);
         entity.setCanPickupItems(false);
         entity.setCustomName("Target");
         entity.setCustomNameVisible(true);

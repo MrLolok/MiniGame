@@ -11,6 +11,8 @@ public interface ITargetShootingService extends Service {
 
     ITargetShootingGame getGame(Player player);
 
+    ITargetShootingGame getGame(int entityId);
+
     ITargetShootingGame create();
 
     Inventory getGamesInventory();

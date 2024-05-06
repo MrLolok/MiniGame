@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ public class ItemBuilder {
     private List<ItemFlag> flags;
     private Map<Enchantment, Integer> enchantments;
     private int amount = 1;
+    private boolean unbreakable;
 
     public ItemBuilder setMaterial(Material material) {
         this.material = material;
@@ -42,6 +44,11 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setUnbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
+        return this;
+    }
+
     public ItemBuilder setItemFlags(List<ItemFlag> flags) {
         this.flags = flags;
         return this;
@@ -56,12 +63,20 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setEnchantments(Enchantment... enchantments) {
+        Map<Enchantment, Integer> map = new HashMap<>();
+        for (Enchantment enchantment : enchantments)
+            map.put(enchantment, 1);
+        return setEnchantments(map);
+    }
+
     public ItemStack build() {
         if (material == null)
             throw new IllegalArgumentException("Material cannot be null");
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
+        meta.setUnbreakable(unbreakable);
         if (name != null)
             meta.setDisplayName(name);
         if (lore != null)
@@ -72,6 +87,7 @@ public class ItemBuilder {
         if (enchantments != null)
             for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet())
                 meta.addEnchant(enchantment.getKey(), enchantment.getValue(), true);
+        item.setItemMeta(meta);
         return item;
     }
 }

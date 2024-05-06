@@ -11,10 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.unina.minecraft.commands.GameCommand;
 import org.unina.minecraft.items.ItemBuilder;
-import org.unina.minecraft.listeners.FireballExplosionListener;
-import org.unina.minecraft.listeners.InventoryClickListener;
-import org.unina.minecraft.listeners.PlayerConnectionListener;
-import org.unina.minecraft.listeners.TargetShootingListener;
+import org.unina.minecraft.listeners.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,13 +19,14 @@ import java.util.List;
 public class TargetShootingService implements ITargetShootingService {
     private final JavaPlugin plugin;
     private final List<ITargetShootingGame> games = new LinkedList<>();
-    private Listener playerConnectionListener, inventoryClickListener, targetShootingListener, fireballExplosionListener;
+    private Listener playerConnectionListener, inventoryClickListener, targetShootingListener, fireballExplosionListener, entityDamageListener;
 
     public TargetShootingService(JavaPlugin plugin) {
         this.plugin = plugin;
         this.playerConnectionListener = new PlayerConnectionListener(this);
         this.inventoryClickListener = new InventoryClickListener(this);
         this.targetShootingListener = new TargetShootingListener(this);
+        this.entityDamageListener = new EntityDamageListener(this);
         this.fireballExplosionListener = new FireballExplosionListener();
     }
 
@@ -38,6 +36,7 @@ public class TargetShootingService implements ITargetShootingService {
         plugin.getServer().getPluginManager().registerEvents(playerConnectionListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(inventoryClickListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(targetShootingListener, plugin);
+        plugin.getServer().getPluginManager().registerEvents(entityDamageListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(fireballExplosionListener, plugin);
         plugin.getCommand("game").setExecutor(command);
     }
@@ -47,6 +46,7 @@ public class TargetShootingService implements ITargetShootingService {
         HandlerList.unregisterAll(playerConnectionListener);
         HandlerList.unregisterAll(inventoryClickListener);
         HandlerList.unregisterAll(targetShootingListener);
+        HandlerList.unregisterAll(entityDamageListener);
         HandlerList.unregisterAll(fireballExplosionListener);
     }
 
@@ -59,6 +59,14 @@ public class TargetShootingService implements ITargetShootingService {
     public ITargetShootingGame getGame(Player player) {
         for (ITargetShootingGame game : games)
             if (game.isPlaying(player))
+                return game;
+        return null;
+    }
+
+    @Override
+    public ITargetShootingGame getGame(int entityId) {
+        for (ITargetShootingGame game : games)
+            if (game.getTarget().getEntityId() == entityId)
                 return game;
         return null;
     }
